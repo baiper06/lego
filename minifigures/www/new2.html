@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Minifigures</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/app.css">
+
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script type="text/javascript" charset="utf-8">
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+
+    // Wait for device API libraries to load
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    // device APIs are available
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+    }
+
+    // Called when a photo is successfully retrieved
+    function onPhotoDataSuccess(imageData) {
+      alert('Success data: ' + pictureSource);
+      var smallImage = document.getElementById('photo');
+      smallImage.style.display = 'block';
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+    }
+
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { 
+        quality: 50,
+        destinationType: destinationType.DATA_URL,
+        sourceType: source });
+    }
+
+    // Called if something bad happens.
+    //
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+
+  </script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/jquery1_7_2.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
+  <script type="text/javascript">
+	function save(){
+		Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
+		var Minifigures = Parse.Object.extend("minifigures");
+		var Minifigures = new Minifigures();
+	
+		var name 	= document.getElementById('name').value;
+		var serie 	= document.getElementById("serie").value;
+		var description	= document.getElementById("description").value;
+		var photo	= document.getElementById("photo").src;
+		Minifigures.save({name: name, serie: serie, description: description, photo: photo}, {
+			success: function(object) {
+				$(".success").show();
+			},
+			error: function(model, error) {
+				$(".error").show();
+			}
+		});
+	}
+  </script>
+
+  </head>
+  <body>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+
+    <div>
+      	<div style="display:none" class="success">Bien! ha sido guardada correctamente.</div>
+	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
+
+      <form class="form-signin" role="form">
+
+	<img style="display:none;width:100px;height:100px;" id="photo" src="" />
+
+        <h2 class="form-signin-heading">Nueva figura</h2>
+	
+	<input id="name" type="text" class="form-control" placeholder="Nombre">
+	<input id="serie" type="text" class="form-control" placeholder="Serie">
+	<textarea id="description" class="form-control" rows="3" placeholder="Biografía"></textarea>
+
+	<button onclick="save()" class="btn btn-lg btn-primary btn-block" >Guardar</button>
+
+      </form>
+
+    </div><!-- /.container -->
+
+  </body>
+</html>
+
