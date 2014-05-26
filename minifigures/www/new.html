@@ -34,43 +34,37 @@
       	<div style="display:none" class="success">Bien! ha sido guardada correctamente.</div>
 	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
 
-      <form class="form-signin" role="form">
+      <div class="form-signin" role="form">
 
 	<img id="largeImage" class="img-rounded img-responsive"></img>
 	<img id="imgProfile" class="img-rounded img-responsive"></img>
-	<button onclick="capturePhoto();">Capture Photo</button>
-	<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Gallery!!</button>
+	<button onClick="capturePhoto();">Capture Photo</button>
+	<button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">From Gallery!!</button>
 
         <h2 class="form-signin-heading">Nueva figura</h2>
 	
 	<input id="nameMinifigures" type="text" class="form-control" placeholder="Nombre">
 	<input id="serieMinifigures" type="text" class="form-control" placeholder="Serie">
 	<input id="descriptionMinifigures" type="text" class="form-control" placeholder="Biograf&iacute;a">
-	<textarea id="descriptionx" class="form-control" rows="3" placeholder="Biografía"></textarea>
+	<button onClick="save()" class="btn btn-lg btn-primary btn-block" >Guardar</button>
 
-	<button onclick="save()" class="btn btn-lg btn-primary btn-block" >Guardar</button>
-
-      </form>
+      </div>
 
     </div><!-- /.container -->
-	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>
-	<script type="text/javascript" src="js/jquery1_7_2.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
   	<script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
 
   <script type="text/javascript">
 	function save(){
 		Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
 		var Minifigures = Parse.Object.extend("minifigures");
-		var Minifigures = new Minifigures();
+		var minifigures = new Minifigures();
 
-		Minifigures.set('name', 	document.getElementById('nameMinifigures').value );
-		Minifigures.set('serie', 	document.getElementById('serieMinifigures').value );
-		Minifigures.set('description', 	document.getElementById('descriptionMinifigures').value );
+		minifigures.set('name', 	document.getElementById('nameMinifigures').value );
+		minifigures.set('serie', 	document.getElementById('serieMinifigures').value );
+		minifigures.set('description', 	document.getElementById('descriptionMinifigures').value );
 
-		Minifigures.save(Minifigures, {
-			success: function(object) {
+		minifigures.save(null, {
+			success: function(minifigures) {
 				$(".success").show();
 			},
 			error: function(model, error) {
