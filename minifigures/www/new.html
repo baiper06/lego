@@ -51,8 +51,11 @@
       </div>
 
     </div><!-- /.container -->
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/jquery1_7_2.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
   	<script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
-
   <script type="text/javascript">
 	function save(){
 		Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
@@ -66,12 +69,22 @@
 		minifigures.save(null, {
 			success: function(minifigures) {
 				$(".success").show();
+				location.href = "index.html";
 			},
 			error: function(model, error) {
 				alert("Error: " + error.code + " " + error.message);
 				$(".error").show();
 			}
 		});
+		/*
+		var Tag = Parse.Object.extend("tag");
+		var tag = new Tag();
+		tag.set('value', 'valu3e' );
+		tag.save();
+		
+		var relation = minifigures.relation("tags").query();
+		relation.add(tag);
+		*/
 	}
   </script>
 
