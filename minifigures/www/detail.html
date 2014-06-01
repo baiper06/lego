@@ -23,7 +23,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Lista</a></li>
+            <li class="active"><a href="index.html">Lista</a></li>
             <li><a href="new.html">Nuevo</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -43,51 +43,62 @@
   	<script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
 
   <script type="text/javascript">
+	function getUrlParameters(parameter){
+	   /*
+	    Function: getUrlParameters
+	    Description: Get the value of URL parameters either from 
+		         current URL or static URL
+	    Author: Tirumal
+	    URL: www.code-tricks.com
+	   */
+	   var currLocation = window.location.search;
+	   var parArr = currLocation.split("?")[1].split("&");
+	   
+	   for(var i = 0; i < parArr.length; i++){
+		parr = parArr[i].split("=");
+		if(parr[0] == parameter){
+		    return decodeURIComponent(parr[1]);          
+		}
+	   }
+	}
+
+
     Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
 
 	var Minifigures = Parse.Object.extend("minifigures");
 	var queryObject = new Parse.Query(Minifigures);
 
+	queryObject.equalTo('objectId', getUrlParameters('id'));
 	queryObject.find({
 	    success: function (results) {
 		$("#minifigures").show();
 		var list = document.getElementById('minifigures');
-		for (var i = 0; i < results.length; i++) {
-		    	// Iteratoration for class object.
-			var newItem = document.createElement('div');
-<<<<<<< 1480bd7306318b53fa5c792eb1e2aa6b2f95513d
-			newItem.setAttribute('class', 'col-md-6');
-			newItem.innerHTML = 	'<div class="well well-sm">'+
-						       '<div class="row">'+
-							    '<div class="col-xs-4 text-center">'+
-								'<img src="'+results[i].get("photo").url()+'" class="img-rounded img-responsive"></img>'+
-							    '</div>'+
-							    '<div class="col-xs-8 section-box">'+
-								'<h2>'+results[i].get("name")+' <small>' +results[i].get("serie")+'</small></h2>'+
-								'<p>'+results[i].get("description")+'</p>'+
-							    '</div>'+
-							'</div>'+
-=======
-			newItem.setAttribute('class', 'col-md-6 list');
-			newItem.innerHTML = 	'<div class="well well-sm">'+
-						       '<a class="row" href="detail.html?id='+results[i].id+'">'+
-							    '<div class="col-xs-3 text-center">'+
-								'<img src="'+results[i].get("photo").url()+'" class="img-rounded"></img>'+
-							    '</div>'+
-							    '<div class="col-xs-9 section-box">'+
-								'<h2>'+results[i].get("name")+' <small>' +results[i].get("serie")+'</small></h2>'+
-							    '</div>'+
-							'</a>'+
->>>>>>> 9748e51e7827bb5d7f6ff2cd80c9010d5a0a2d89
-						'</div>';
-			list.appendChild(newItem);
-		}
+	    	// Iteratoration for class object.
+		var newItem = document.createElement('div');
+		newItem.setAttribute('class', 'col-md-12');
+		newItem.innerHTML = 	'<div class="well">'+
+					       '<div class="row">'+
+						    '<div class="col-xs-12 ">'+
+						     	'<h2>'+results[0].get("name")+' <small>' +results[0].get("serie")+'</small></h2>'+
+						    '</div>'+
+						    '<div class="col-xs-12 ">'+
+						     	'<img src="'+results[0].get("photo").url()+'" class="img-rounded img-responsive center-block"></img>'+
+						    '</div>'+
+						    '<div class="col-xs-12 section-box">'+
+							'<br><p class="text-justify">'+results[0].get("description")+'</p>'+
+						    '</div>'+
+						'</div>'+
+					'</div>';
+		list.appendChild(newItem);
 	    },
 	    error: function (error) {
 		$(".error").show();
 		alert("Error: " + error.code + " " + error.message);
 	    }
 	  });
+
+
+
 
   </script>
 </body>

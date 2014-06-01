@@ -5,3 +5,17 @@ body {
 	margin-top:20px;
   	padding-top: 50px;
 }
+.well-sm {
+    padding: 0px;
+}
+
+.list h2 {
+    margin-top: 20px;
+}
+
+.list img {
+    max-height:80px;
+}
+
+
+  
