@@ -25,6 +25,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Lista</a></li>
             <li><a href="new.html">Nuevo</a></li>
+            <li><a href="search.html">Buscar</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -72,7 +73,7 @@
 			newItem.innerHTML = 	'<div class="well well-sm">'+
 						       '<a class="row" href="detail.html?id='+results[i].id+'">'+
 							    '<div class="col-xs-3 text-center">'+
-								'<img src="'+results[i].get("photo").url()+'" class="img-rounded"></img>'+
+								'<img src="'+results[i].get("photo")+'" class="img-rounded"></img>'+
 							    '</div>'+
 							    '<div class="col-xs-9 section-box">'+
 								'<h2>'+results[i].get("name")+' <small>' +results[i].get("serie")+'</small></h2>'+

@@ -25,6 +25,7 @@
           <ul class="nav navbar-nav">
             <li><a href="index.html">Lista</a></li>
             <li class="active"><a href="#">Nuevo</a></li>
+            <li><a href="search.html">Buscar</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -36,21 +37,16 @@
 
       <div class="form-signin" role="form">
 
-<<<<<<< 1480bd7306318b53fa5c792eb1e2aa6b2f95513d
-	<img id="largeImage" class="img-rounded img-responsive"></img>
-	<img id="imgProfile" class="img-rounded img-responsive"></img>
-	<button onClick="capturePhoto();">Capture Photo</button>
-	<button onClick="getPhoto(pictureSource.PHOTOLIBRARY);">From Gallery!!</button>
-=======
-	<button onclick="getPhoto(pictureSource.PHOTOLIBRARY, 'foto1');">Agregar foto</button><br>
-	<img style="display:none;" id="foto1" src="" class="col-sm-3 img-responsive" />
->>>>>>> 9748e51e7827bb5d7f6ff2cd80c9010d5a0a2d89
+	<button onclick="getPhoto(pictureSource.PHOTOLIBRARY, 'photoMinifigures');">Agregar foto</button><br>
+	<img style="display:none;" id="photoMinifigures" src="" class="col-sm-3 img-responsive" />
 
         <h2 class="form-signin-heading">Nueva figura</h2>
 	
 	<input id="nameMinifigures" type="text" class="form-control" placeholder="Nombre">
 	<input id="serieMinifigures" type="text" class="form-control" placeholder="Serie">
 	<input id="descriptionMinifigures" type="text" class="form-control" placeholder="Biograf&iacute;a">
+
+	<input id="valuesTags" type="text" class="form-control" placeholder="Etiquetas">
 	<button onClick="save()" class="btn btn-lg btn-primary btn-block" >Guardar</button>
 
       </div>
@@ -61,23 +57,26 @@
 	<script type="text/javascript" src="js/jquery1_7_2.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
   	<script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
-<<<<<<< 1480bd7306318b53fa5c792eb1e2aa6b2f95513d
-=======
   	<script type="text/javascript" charset="utf-8" src="js/camera.js"></script>
->>>>>>> 9748e51e7827bb5d7f6ff2cd80c9010d5a0a2d89
   <script type="text/javascript">
+		var minifigureId;
+		var tagId;
 	function save(){
 		Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
+
 		var Minifigures = Parse.Object.extend("minifigures");
 		var minifigures = new Minifigures();
 
 		minifigures.set('name', 	document.getElementById('nameMinifigures').value );
 		minifigures.set('serie', 	document.getElementById('serieMinifigures').value );
 		minifigures.set('description', 	document.getElementById('descriptionMinifigures').value );
+		minifigures.set('photo', 	document.getElementById('photoMinifigures').src );
 
-		minifigures.save(null, {
+		minifigures.save(minifigureId, {
 			success: function(minifigures) {
 				$(".success").show();
+				minifigureId = minifigures.id;
+				saveTags();
 				location.href = "index.html";
 			},
 			error: function(model, error) {
@@ -85,15 +84,57 @@
 				$(".error").show();
 			}
 		});
-		/*
-		var Tag = Parse.Object.extend("tag");
-		var tag = new Tag();
-		tag.set('value', 'valu3e' );
-		tag.save();
-		
-		var relation = minifigures.relation("tags").query();
-		relation.add(tag);
-		*/
+	}
+
+	function saveTags(){
+		var value = document.getElementById('valuesTags').value;
+		var Tags = Parse.Object.extend("tags");
+		var queryObject = new Parse.Query(Tags);
+		queryObject.equalTo('value', value);
+		queryObject.find({
+		    success: function (results) {
+			$("#minifigures").show();
+				if( results.length==1 ){
+					tagId = results[0].id;
+					saveRelation();
+				} else {
+					var Tags = Parse.Object.extend("tags");
+					var tags = new Tags();
+					tags.set('value',  value);
+					tags.save(null, {
+						success: function(tags) {
+							tagId = tags.id;
+							saveRelation();
+						},
+						error: function(model, error) {
+							alert("Error: " + error.code + " " + error.message);
+							$(".error").show();
+						}
+					});
+				}						
+		    },
+		    error: function (error) {
+			$(".error").show();
+			alert("Error: " + error.code + " " + error.message);
+		    }
+		  });		
+	}
+
+	function saveRelation(){
+		//relation
+		var Relation = Parse.Object.extend("minifigures_tags");
+		var relation = new Relation();
+		relation.set('minifigures', minifigureId);
+		relation.set('tags', tagId);
+		relation.save(null, {
+			success: function(ob) {
+			},
+			error: function(model, error) {
+				alert("Error: " + error.code + " " + error.message);
+				$(".error").show();
+			}
+		});
+
 	}
   </script>
 

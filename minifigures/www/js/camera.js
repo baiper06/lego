@@ -12,29 +12,7 @@
         destinationType=navigator.camera.DestinationType;
     }
 
-    // Called when a photo is successfully retrieved
-    //
-    function onPhotoDataSuccess(imageData) {
-      // Uncomment to view the base64 encoded image data
-      // console.log(imageData);
-
-      // Get image handle
-      //
-      var smallImage = document.getElementById('smallImage');
-
-      // Unhide image elements
-      //
-      smallImage.style.display = 'block';
-
-      // Show the captured photo
-      // The inline CSS rules are used to resize the image
-      //
-      smallImage.src = "data:image/jpeg;base64," + imageData;
-    }
- 
-    // Called when a photo is successfully retrieved
-    //
-    function onPhotoURISuccess(imageURI, idPhoto) {
+    function onPhotoSuccess(imageData, idPhoto) {
       // Uncomment to view the image file URI 
       // console.log(idPhoto);
       // Get image handle
@@ -48,37 +26,15 @@
       // Show the captured photo
       // The inline CSS rules are used to resize the image
       //
-      largeImage.src = imageURI;
+      largeImage.src = "data:image/jpeg;base64," + imageData;
     }
 
-    // A button will call this function
-    //
-    function capturePhoto() {
-      // Take picture using device camera and retrieve image as base64-encoded string
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
-    }
-
-    // A button will call this function
-    //
-    function capturePhotoEdit() {
-      // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true }); 
-    }
-
-    // A button will call this function
-    //
     function getPhoto(source, idPhoto) {
       // Retrieve image file location from specified source
-      navigator.camera.getPicture(function(imageURI) { onPhotoURISuccess(imageURI, idPhoto); }, onFail, { quality: 50, 
-        destinationType: destinationType.FILE_URI,
+      navigator.camera.getPicture(function(imageData) { onPhotoSuccess(imageData, idPhoto); }, onFail, { quality: 50, 
+        destinationType: destinationType.DATA_URL,
         sourceType: source });
     }
-function onFail(message) {
-    alert('Failed because: ' + message);
-}
-
-    // Called if something bad happens.
-    // 
     function onFail(message) {
       alert('Failed because: ' + message);
     }
