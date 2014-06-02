@@ -56,19 +56,6 @@
 		for (var i = 0; i < results.length; i++) {
 		    	// Iteratoration for class object.
 			var newItem = document.createElement('div');
-<<<<<<< 1480bd7306318b53fa5c792eb1e2aa6b2f95513d
-			newItem.setAttribute('class', 'col-md-6');
-			newItem.innerHTML = 	'<div class="well well-sm">'+
-						       '<div class="row">'+
-							    '<div class="col-xs-4 text-center">'+
-								'<img src="'+results[i].get("photo").url()+'" class="img-rounded img-responsive"></img>'+
-							    '</div>'+
-							    '<div class="col-xs-8 section-box">'+
-								'<h2>'+results[i].get("name")+' <small>' +results[i].get("serie")+'</small></h2>'+
-								'<p>'+results[i].get("description")+'</p>'+
-							    '</div>'+
-							'</div>'+
-=======
 			newItem.setAttribute('class', 'col-md-6 list');
 			newItem.innerHTML = 	'<div class="well well-sm">'+
 						       '<a class="row" href="detail.html?id='+results[i].id+'">'+
@@ -79,7 +66,6 @@
 								'<h2>'+results[i].get("name")+' <small>' +results[i].get("serie")+'</small></h2>'+
 							    '</div>'+
 							'</a>'+
->>>>>>> 9748e51e7827bb5d7f6ff2cd80c9010d5a0a2d89
 						'</div>';
 			list.appendChild(newItem);
 		}
