@@ -23,7 +23,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Lista</a></li>
+            <li class="active"><a href="index.html">Lista</a></li>
             <li><a href="new.html">Nuevo</a></li>
             <li><a href="search.html">Buscar</a></li>
           </ul>
@@ -41,8 +41,15 @@
       </span>
     </div><!-- /input-group -->
 	<br />
-	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
-	<div style="display:none" id="notfound">No hay resultados</div>
+	<div  style="display:none" id="notfound" class="alert alert-warning alert-dismissable">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	  <strong>Lo sentimos!</strong> No hay resultados
+	</div>
+	<div  style="display:none" class="error alert alert-error alert-dismissable">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	  <strong>Error!</strong> No se ha podido cargar la lista de minifiguras.
+	</div>
+
 	<div style="display:none" id="minifigures"></div>
     </div><!-- /.container -->
 

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/app.css">
+  <link href="css/bootstrap-tokenfield.min.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -32,21 +33,26 @@
     </div>
 
     <div>
-      	<div style="display:none" class="success">Bien! ha sido guardada correctamente.</div>
-	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
+	<div  style="display:none" class="success alert alert-success alert-dismissable">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	  <strong>Bien!</strong> Se ha sido guardada correctamente.
+	</div>
+	<div  style="display:none" class="error alert alert-error alert-dismissable">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	  <strong>Error!</strong> No se ha podido cargar la lista de minifiguras.
+	</div>
 
       <div>
 
-	<button onclick="getPhoto(pictureSource.PHOTOLIBRARY, 'photoMinifigures');">Agregar foto</button><br>
-	<img style="display:none;" id="photoMinifigures" src="" class="col-sm-3 img-responsive" />
-
         <h2>Nueva figura</h2>
-	
+	<div class="col-sm-3">
+		<img id="photoMinifigures" src="img/add_img.png" class=" center-block img-responsive" onclick="getPhoto(pictureSource.PHOTOLIBRARY, 'photoMinifigures');" />
+	</div>
 	<input id="nameMinifigures" type="text" class="form-control" placeholder="Nombre">
 	<input id="serieMinifigures" type="text" class="form-control" placeholder="Serie">
 	<input id="descriptionMinifigures" type="text" class="form-control" placeholder="Biograf&iacute;a">
-
-	<input id="valuesTags" type="text" class="form-control" placeholder="Etiquetas">
+	
+	<input type="text" class="form-control" id="valuesTags" placeholder="Etiquetas" />
 	<button onClick="save()" class="btn btn-lg btn-primary btn-block" >Guardar</button>
 
       </div>
@@ -58,6 +64,9 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
   	<script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
   	<script type="text/javascript" charset="utf-8" src="js/camera.js"></script>
+  	<script type="text/javascript" src="js/bootstrap-tokenfield.min.js" charset="UTF-8"></script>  
+  	<script type="text/javascript" src="js/scrollspy.js" charset="UTF-8"></script>  
+  	<script type="text/javascript" src="js/docs.js" charset="UTF-8"></script>   
   <script type="text/javascript">
 		var minifigureId;
 		var tagId;
