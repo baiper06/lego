@@ -23,7 +23,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.html">Lista</a></li>
+            <li class="active"><a href="#">Lista</a></li>
             <li><a href="new.html">Nuevo</a></li>
             <li><a href="search.html">Buscar</a></li>
           </ul>
@@ -33,6 +33,16 @@
 
     <div>
       	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
+
+    <div class="input-group">
+      <input type="text" class="form-control" id="valueTag" placeholder="Escriba una etiqueta">
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" onClick="search()">Buscar</button>
+      </span>
+    </div><!-- /input-group -->
+	<br />
+	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
+	<div style="display:none" id="notfound">No hay resultados</div>
 	<div style="display:none" id="minifigures"></div>
     </div><!-- /.container -->
 
@@ -44,101 +54,78 @@
   	<script type="text/javascript" src="js/parse-1.2.18.min.js"></script>
 
   <script type="text/javascript">
-	function getUrlParameters(parameter){
-	   /*
-	    Function: getUrlParameters
-	    Description: Get the value of URL parameters either from 
-		         current URL or static URL
-	    Author: Tirumal
-	    URL: www.code-tricks.com
-	   */
-	   var currLocation = window.location.search;
-	   var parArr = currLocation.split("?")[1].split("&");
-	   
-	   for(var i = 0; i < parArr.length; i++){
-		parr = parArr[i].split("=");
-		if(parr[0] == parameter){
-		    return decodeURIComponent(parr[1]);          
-		}
-	   }
-	}
 
-
-    Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
-
-	var Minifigures = Parse.Object.extend("minifigures");
-	var queryObject = new Parse.Query(Minifigures);
-
-	queryObject.equalTo('objectId', getUrlParameters('id'));
-	queryObject.find({
-	    success: function (results) {
-		$("#minifigures").show();
-		var tags = [];
-		var Relation = Parse.Object.extend("minifigures_tags");
-		var queryObject = new Parse.Query(Relation);
-		queryObject.equalTo('minifigures', results[0].id);
+function search(){
+	Parse.initialize("RK4skoEkCUsfFMyOeNwj9HU1hnQwVa6GtEYC0Hbm", "89wd94677uRDtfrGzNlEBxDKcbXMJ6VJ5pgCVO2y");
+		var value = document.getElementById('valueTag').value;
+		var Tags = Parse.Object.extend("tags");
+		var figures = [];
+		var queryObject = new Parse.Query(Tags);
+		queryObject.equalTo('value', value);
 		queryObject.find({
 		    success: function (results) {
-			for (var i = 0; i < results.length; i++) {
-				var Tags = Parse.Object.extend("tags");
-				var query = new Parse.Query(Tags);
-				query.equalTo('objectId', results[i].get("tags"));
-				query.find({
-				    success: function (results_tags) {
-					tags.push(results_tags[0].get("value"));					
-				    },
-				    error: function (error) {
-					alert("Error: " + error.code + " " + error.message);
-				    }
-				  });	
-			}
-			return tags;					
+			$("#minifigures").show();
+				if( results.length>=1 ){
+					$("#notfound").hide();
+					var idTag = results[0].id;
+					var Relation = Parse.Object.extend("minifigures_tags");
+					var queryObject = new Parse.Query(Relation);
+					queryObject.equalTo('tags', idTag);
+					queryObject.find({
+					    success: function (results) {
+						for (var i = 0; i < results.length; i++) {
+							var Minifigures = Parse.Object.extend("minifigures");
+							var query = new Parse.Query(Minifigures);
+							query.equalTo('objectId', results[i].get("minifigures"));
+							query.find({
+							    success: function (results_figures) {
+								figures.push(results_figures[0]);					
+							    },
+							    error: function (error) {
+								alert("Error: " + error.code + " " + error.message);
+							    }
+							  });	
+						}
+						setTimeout(function() {
+							var list = document.getElementById('minifigures');
+							while (list.firstChild) {
+							    list.removeChild(list.firstChild);
+							}
+
+							for (var i = 0; i < figures.length; i++) {
+							    	// Iteratoration for class object.
+								var newItem = document.createElement('div');
+								newItem.setAttribute('class', 'col-md-6 list');
+								newItem.innerHTML = 	'<div class="well well-sm">'+
+											       '<a class="row" href="detail.html?id='+figures[i].id+'">'+
+												    '<div class="col-xs-3 text-center">'+
+													'<img src="'+figures[i].get("photo")+'" class="img-rounded"></img>'+
+												    '</div>'+
+												    '<div class="col-xs-9 section-box">'+
+													'<h2>'+figures[i].get("name")+' <small>' +figures[i].get("serie")+'</small></h2>'+
+												    '</div>'+
+												'</a>'+
+											'</div>';
+								list.appendChild(newItem);
+							}
+						  }, 1000);					
+					    },
+					    error: function (error) {
+						alert("Error: " + error.code + " " + error.message);
+					    }
+					  });	
+				} else {
+					$("#notfound").show();
+				}						
 		    },
 		    error: function (error) {
+			$(".error2").show();
 			alert("Error: " + error.code + " " + error.message);
 		    }
 		  });	
-		setTimeout(function() {
-			var list = document.getElementById('minifigures');
-			var tags_label = "";
-		    	// Iteratoration for class object.
-			for (var i = 0; i < tags.length; i++) {
-				tags_label += '<span class="label label-info">'+tags[i]+'</span> ';
-			}
-			var newItem = document.createElement('div');
-			newItem.setAttribute('class', 'col-md-12 detail');
-			newItem.innerHTML = 	'<div class="well">'+
-						       '<div class="row">'+
-							    '<div class="col-xs-12 ">'+
-							     	'<h2>'+results[0].get("name")+' <small>' +results[0].get("serie")+'</small></h2>'+
-							    '</div>' +
-							    '<div class="col-xs-12">'+
-							     	tags_label +
-							    '</div>' + 
-							    '<div class="col-xs-12 ">'+
-							     	'<img src="'+results[0].get("photo")+'" class="img-rounded img-responsive center-block"></img>'+
-							    '</div>'+
-							    '<div class="col-xs-12 section-box">'+
-								'<br><p class="text-justify">'+results[0].get("description")+'</p>'+
-							'</div>'+
-							'</div>'+
-						'</div>';
-			list.appendChild(newItem);
-		  }, 1000);
 
-		
-	    },
-	    error: function (error) {
-		$(".error").show();
-		alert("Error: " + error.code + " " + error.message);
-	    }
-	  });
+}
 
-
-	function getTags(minifigureId){
-
-
-	}
   </script>
 </body>
 
