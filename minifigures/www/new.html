@@ -35,12 +35,12 @@
       	<div style="display:none" class="success">Bien! ha sido guardada correctamente.</div>
 	<div style="display:none" class="error">Error: no se ha podido cargar la lista de minifiguras</div>
 
-      <div class="form-signin" role="form">
+      <div>
 
 	<button onclick="getPhoto(pictureSource.PHOTOLIBRARY, 'photoMinifigures');">Agregar foto</button><br>
 	<img style="display:none;" id="photoMinifigures" src="" class="col-sm-3 img-responsive" />
 
-        <h2 class="form-signin-heading">Nueva figura</h2>
+        <h2>Nueva figura</h2>
 	
 	<input id="nameMinifigures" type="text" class="form-control" placeholder="Nombre">
 	<input id="serieMinifigures" type="text" class="form-control" placeholder="Serie">
@@ -76,8 +76,11 @@
 			success: function(minifigures) {
 				$(".success").show();
 				minifigureId = minifigures.id;
-				saveTags();
-				location.href = "index.html";
+				var values = document.getElementById('valuesTags').value.split(",");
+				for (var i = 0; i < values.length; i++) {
+					saveTags(values[i]);
+				}
+				//location.href = "index.html";
 			},
 			error: function(model, error) {
 				alert("Error: " + error.code + " " + error.message);
@@ -86,35 +89,33 @@
 		});
 	}
 
-	function saveTags(){
-		var value = document.getElementById('valuesTags').value;
+	function saveTags(value){
 		var Tags = Parse.Object.extend("tags");
 		var queryObject = new Parse.Query(Tags);
 		queryObject.equalTo('value', value);
 		queryObject.find({
 		    success: function (results) {
 			$("#minifigures").show();
-				if( results.length==1 ){
-					tagId = results[0].id;
-					saveRelation();
-				} else {
-					var Tags = Parse.Object.extend("tags");
-					var tags = new Tags();
-					tags.set('value',  value);
-					tags.save(null, {
-						success: function(tags) {
-							tagId = tags.id;
-							saveRelation();
-						},
-						error: function(model, error) {
-							alert("Error: " + error.code + " " + error.message);
-							$(".error").show();
-						}
-					});
-				}						
+			if( results.length>=1 ){
+				tagId = results[0].id;
+				saveRelation();
+			} else {
+				var Tags = Parse.Object.extend("tags");
+				var tags = new Tags();
+				tags.set('value',  value);
+				tags.save(null, {
+					success: function(tags) {
+						tagId = tags.id;
+						saveRelation();
+					},
+					error: function(model, error) {
+						alert("Error: " + error.code + " " + error.message);
+						$(".error").show();
+					}
+				});
+			}						
 		    },
 		    error: function (error) {
-			$(".error").show();
 			alert("Error: " + error.code + " " + error.message);
 		    }
 		  });		
